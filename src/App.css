@@ -1,0 +1,18 @@
+/* App.css */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: black;
+  color: white;
+  /* Ensures the default text color is white */
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
