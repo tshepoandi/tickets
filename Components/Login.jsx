@@ -1,8 +1,105 @@
 import { useState, useContext } from 'react'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { UserContext } from '../contexts/UserContext'
+import styled, { keyframes } from 'styled-components'
+
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+`
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+`
+
+const LoginBox = styled.div`
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 100%;
+  max-width: 400px;
+  animation: ${fadeIn} 0.5s ease-out;
+`
+
+const Title = styled.h1`
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #4a4a4a;
+`
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`
+
+const InputGroup = styled.div`
+  margin-bottom: 1rem;
+`
+
+const Label = styled.label`
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4a4a4a;
+  margin-bottom: 0.25rem;
+`
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+
+  &:focus {
+    outline: none;
+    border-color: #6e8efb;
+    box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.3);
+  }
+`
+
+const Button = styled.button`
+  width: 100%;
+  background-color: #6e8efb;
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #5d7ce0;
+  }
+`
+
+const SignUpText = styled.p`
+  margin-top: 1rem;
+  text-align: center;
+  color: #4a4a4a;
+`
+
+const SignUpLink = styled(Link)`
+  color: #6e8efb;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -15,13 +112,10 @@ const Login = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/Users`,
-        {
-          username,
-          email,
-        },
+        { username, email },
       )
-      setUser(response.data)
-      navigate('/dashboard')
+      setUser(response.data) // Update user context
+      navigate('/dashboard') // Navigate to dashboard
     } catch (error) {
       console.error('Error logging in:', error)
       alert('Failed to log in. Please check your credentials and try again.')
@@ -29,59 +123,35 @@ const Login = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          Login
-        </h1>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Username
-            </label>
-            <input
+    <Container>
+      <LoginBox>
+        <Title>Login</Title>
+        <Form onSubmit={handleLogin}>
+          <InputGroup>
+            <Label>Username</Label>
+            <Input
               type="text"
-              id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Email
-            </label>
-            <input
+          </InputGroup>
+          <InputGroup>
+            <Label>Email</Label>
+            <Input
               type="email"
-              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
-          >
-            Log In
-          </button>
-        </form>
-        <p className="mt-4 text-center text-gray-600">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-blue-500 hover:underline">
-            Sign up
-          </Link>
-        </p>
-      </div>
-    </div>
+          </InputGroup>
+          <Button type="submit">Log In</Button>
+        </Form>
+        <SignUpText>
+          Don't have an account? <SignUpLink to="/register">Sign up</SignUpLink>
+        </SignUpText>
+      </LoginBox>
+    </Container>
   )
 }
 
