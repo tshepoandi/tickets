@@ -56,14 +56,21 @@ const PurchaseTicket = () => {
     setIsLoading(true)
     setError(null)
     try {
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/Tickets`, {
-        userId: user.id,
-        scheduleId: parseInt(scheduleId),
-      })
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/Tickets`,
+        {
+          userId: user.id,
+          scheduleId: parseInt(scheduleId),
+        },
+      )
+      console.log('Purchase response:', response.data)
       alert('Ticket purchased successfully!')
       navigate('/dashboard')
     } catch (error) {
-      console.error('Error purchasing ticket:', error)
+      console.error(
+        'Error purchasing ticket:',
+        error.response ? error.response.data : error.message,
+      )
       setError('Failed to purchase ticket. Please try again.')
     } finally {
       setIsLoading(false)
@@ -85,13 +92,13 @@ const PurchaseTicket = () => {
           <p>Bus Number: {schedule.busNumber}</p>
           <p>
             Available Seats:{' '}
-            {availableSeats !== null ? availableSeats : 'Loading...'}
+            {availableSeats !== null ? availableSeats.toString() : 'Loading...'}
           </p>
         </div>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <button
           onClick={handlePurchaseTicket}
-          disabled={isLoading} // Add this to prevent multiple clicks
+          disabled={isLoading || availableSeats <= 0}
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
         >
           {isLoading ? 'Loading...' : 'Purchase Ticket'}

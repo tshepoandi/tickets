@@ -6,7 +6,7 @@ import { UserContext } from '../contexts/UserContext'
 
 const Login = () => {
   const [username, setUsername] = useState('')
-  const [email, setemail] = useState('')
+  const [email, setEmail] = useState('')
   const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
@@ -30,15 +30,15 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-6 text-center text-white">
+      <div className="bg-white p-8 rounded-lg shadow-md w-96">
+        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
           Login
         </h1>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label
               htmlFor="username"
-              className="block font-bold mb-2 text-white"
+              className="block text-sm font-medium text-gray-700 mb-1"
             >
               Username
             </label>
@@ -47,33 +47,36 @@ const Login = () => {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 rounded-lg text-white border border-gray-600"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <div className="mb-6">
-            <label htmlFor="email" className="block font-bold mb-2 text-white">
-              email
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Email
             </label>
             <input
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setemail(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 rounded-lg text-white border border-gray-600"
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600"
+            className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
           >
             Log In
           </button>
         </form>
-        <p className="mt-4 text-center text-white">
+        <p className="mt-4 text-center text-gray-600">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-400 hover:underline">
+          <Link to="/register" className="text-blue-500 hover:underline">
             Sign up
           </Link>
         </p>

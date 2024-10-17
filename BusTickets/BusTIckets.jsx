@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const API_BASE_URL = 'http://localhost:5000/api'
+const API_BASE_URL = 'http://localhost:5146/api'
 
 const BusTicketingSystem = () => {
   const [routes, setRoutes] = useState([])
@@ -45,11 +45,12 @@ const BusTicketingSystem = () => {
   const fetchAvailableSeats = async (scheduleId) => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/schedules/${scheduleId}/available-seats`,
+        `${API_BASE_URL}/Schedules/${scheduleId}/available-seats`,
       )
       setAvailableSeats(response.data.availableSeats)
     } catch (error) {
       console.error('Error fetching available seats:', error)
+      setAvailableSeats(null)
     }
   }
 
@@ -66,6 +67,7 @@ const BusTicketingSystem = () => {
 
   const handleScheduleSelect = (schedule) => {
     setSelectedSchedule(schedule)
+    setAvailableSeats(null) // Reset before fetching
     fetchAvailableSeats(schedule.id)
   }
 
@@ -73,7 +75,7 @@ const BusTicketingSystem = () => {
     if (!selectedSchedule || !user) return
 
     try {
-      await axios.post(`${API_BASE_URL}/api/tickets`, {
+      await axios.post(`${API_BASE_URL}/tickets`, {
         userId: user.id,
         scheduleId: selectedSchedule.id,
       })
